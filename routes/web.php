@@ -22,3 +22,5 @@ Route::get('/', [Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/createmachine', [Controllers\MachineController::class, 'create'])->name('machine.create');
 Route::post('/createmachine', [Controllers\MachineController::class, 'store']);
 Route::get('/machine/{machine}', [Controllers\MachineController::class, 'show'])->name('machine.details');
+
+require __DIR__ . '/auth.php';
