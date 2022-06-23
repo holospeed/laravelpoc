@@ -1,0 +1,63 @@
+scalar TimeStamp @scalar(class: "App\\GraphQL\\Scalars\\TimeStamp")
+
+type Query {
+    users: [User!]! @paginate # @all # => all users
+    user(id: ID @eq): User @find
+    machines: [Machine!]! @find
+    businessById(id: ID @eq): Business @find
+
+    feedForRxDBReplication(
+        lastId: String!
+        minUpdatedAt: Int!
+        limit: Int!
+    ): User!
+}
+
+type Mutation {
+    createUser(name: String!, email: String!, password: String!): User! @create
+    updateUser(user: User): User! @update
+    deleteUser(id: ID!): User @delete
+    upsertUser(
+        id: ID!
+        name: String!
+        email: String!
+        password: String!
+    ): User! @upsert
+    upsertMachine(
+        id: ID!
+        name: String!
+        model: String!
+        business: Business!
+    ): User! @upsert
+}
+
+type User {
+    id: ID
+    name: String
+    email: String
+    email_verified_at: String
+    updatedAt: TimeStamp! @rename(attribute: "updated_at")
+    businesses: [Business]!
+    dealer: Dealer! @hasOne
+}
+
+type Dealer {
+    id: String
+    name: String
+    updatedAt: TimeStamp! @rename(attribute: "updated_at")
+}
+
+type Business {
+    id: ID
+    name: String
+    updatedAt: TimeStamp! @rename(attribute: "updated_at")
+    machines: [Machine]! @hasMany
+}
+
+type Machine {
+    id: ID
+    name: String
+    model: String
+    updatedAt: TimeStamp! @rename(attribute: "updated_at")
+    business: Business @belongsTo
+}
